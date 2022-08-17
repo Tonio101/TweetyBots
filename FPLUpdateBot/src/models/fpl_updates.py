@@ -29,7 +29,8 @@ class TweetInfo(object):
 
     def get_tweet_dict(self):
         return ({
-                # "timestamp": self.timestamp,
+                "timestamp": self.timestamp,
+                "tweet_id": self.id,
                 "content": self.content
                 })
 
