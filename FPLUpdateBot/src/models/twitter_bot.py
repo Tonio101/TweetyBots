@@ -2,7 +2,6 @@ import datetime
 import json
 import pytz
 import tweepy
-import sys
 
 from time import sleep
 from threading import Thread
@@ -19,6 +18,8 @@ USER_ID = "Fpl_Updates"
 DEFAULT_TIMEZONE = "America/Los_Angeles"
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+DEFAULT_TIME_M = (5 * 60)
+
 
 class TweetInfo(object):
 
@@ -26,22 +27,29 @@ class TweetInfo(object):
         self.id = id
         self.timestamp = timestamp
         self.content = content
+        self.use_as_is = False
+
+    def set_use_as_is(self, use_as_is=False):
+        self.use_as_is = use_as_is
 
     def get_tweet_dict(self):
         return ({
                 # "timestamp": self.timestamp,
+                "use_as_is": self.use_as_is,
                 "tweet_id": self.id,
                 "content": self.content
                 })
 
 
-class FPLUpdates(Thread):
+class TwitterBot(Thread):
 
     def __init__(self,
                  lock,
                  twitter_bearer_token,
                  pubsub_client,
                  twitter_id=USER_ID,
+                 tweet_delay=DEFAULT_TIME_M,
+                 use_as_is=False,
                  max_tweets=MAX_TWEETS_PER_QUERY,
                  tweet_fields=TWEET_FIELDS,
                  timezone=DEFAULT_TIMEZONE):
@@ -55,8 +63,10 @@ class FPLUpdates(Thread):
         self.max_tweets = max_tweets
         self.tweet_fields = tweet_fields
         self.timezone = timezone
+        self.tweet_delay = tweet_delay
+        self.use_as_is = use_as_is
 
-    def get_recent_fpl_tweets_upate(self):
+    def get_recent_tweets(self):
         result = dict()
         now = datetime.datetime.now()
         # current_time = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -80,6 +90,7 @@ class FPLUpdates(Thread):
             for tweet in tweets.data:
                 tweet_info = \
                         TweetInfo(tweet.id, tweet.created_at, tweet.text)
+                tweet_info.set_use_as_is(self.use_as_is)
                 result[tweet.id] = tweet_info
 
                 # print("\n{}[{}]:\n[{}]\n".format(
@@ -87,10 +98,9 @@ class FPLUpdates(Thread):
                 #    tweet.created_at,
                 #    tweet.text
                 # ))
-        except:
+        except BaseException as ex:
             print("Unexpected error[{}]: {}".format(
-                current_time,
-                sys.exc_info()[0]
+                current_time, ex
             ))
 
         return result
@@ -128,7 +138,7 @@ class FPLUpdates(Thread):
 
     def run(self):
         while True:
-            tweets = self.get_recent_fpl_tweets_upate()
+            tweets = self.get_recent_tweets()
             if len(tweets) > 0:
                 self.process_tweets(tweets)
-            sleep(5 * 60)
+            sleep(self.tweet_delay)

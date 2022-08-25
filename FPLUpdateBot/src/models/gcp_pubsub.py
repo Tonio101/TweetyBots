@@ -1,9 +1,12 @@
+import os
+
 from google.cloud import pubsub_v1
 
 
 class GcpPubSubClient(object):
 
-    def __init__(self, project_id, topic_id):
+    def __init__(self, gcp_app_cred_file, project_id, topic_id):
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = gcp_app_cred_file
         self.project_id = project_id
         self.topic_id = topic_id
         self.publisher = \

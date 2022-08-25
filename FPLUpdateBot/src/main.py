@@ -3,7 +3,7 @@ import json
 import os
 
 from threading import Lock
-from models.fpl_updates import FPLUpdates
+from models.twitter_bot import TwitterBot
 from models.gcp_pubsub import GcpPubSubClient
 
 
@@ -40,13 +40,15 @@ def main():
 
     pubsub_client = \
         GcpPubSubClient(
+            gcp_app_cred_file=gcpPubSubConfig['gcpCredsFile'],
             project_id=gcpPubSubConfig['projectId'],
             topic_id=gcpPubSubConfig['publishId']
         )
 
     lock = Lock()
+    # TODO: Only listen to FPL Updates during FPL Gameweek
     fpl_updates = \
-        FPLUpdates(
+        TwitterBot(
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
@@ -54,17 +56,29 @@ def main():
         )
 
     fpl_alerts = \
-        FPLUpdates(
+        TwitterBot(
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
             twitter_id="FPL_Alerts"
         )
 
+    inspirational_tweets = \
+        TwitterBot(
+            lock=lock,
+            twitter_bearer_token=twitterConfig['apiBearerToken'],
+            pubsub_client=pubsub_client,
+            twitter_id="SeffSaid",
+            tweet_delay=(30 * 60),
+            use_as_is=True
+        )
+
     fpl_updates.start()
     fpl_alerts.start()
+    inspirational_tweets.start()
     fpl_updates.join()
     fpl_alerts.join()
+    inspirational_tweets.join()
 
 
 if __name__ == "__main__":
