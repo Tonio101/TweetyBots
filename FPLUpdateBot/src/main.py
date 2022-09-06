@@ -73,12 +73,24 @@ def main():
             use_as_is=True
         )
 
+    funny_tweets = \
+        TwitterBot(
+            lock=lock,
+            twitter_bearer_token=twitterConfig['apiBearerToken'],
+            pubsub_client=pubsub_client,
+            twitter_id="Dadsaysjokes",
+            tweet_delay=(30 * 60),
+            use_as_is=True
+        )
+
     fpl_updates.start()
     fpl_alerts.start()
     inspirational_tweets.start()
+    funny_tweets.start()
     fpl_updates.join()
     fpl_alerts.join()
     inspirational_tweets.join()
+    funny_tweets.join()
 
 
 if __name__ == "__main__":

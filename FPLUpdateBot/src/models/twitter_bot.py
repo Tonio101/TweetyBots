@@ -55,6 +55,7 @@ class TwitterBot(Thread):
                  timezone=DEFAULT_TIMEZONE):
         # Call the Thread class's init function
         Thread.__init__(self)
+        self.setDaemon(True)
         self.lock = lock
         self.client = tweepy.Client(bearer_token=twitter_bearer_token)
         self.pubsub_client = pubsub_client
