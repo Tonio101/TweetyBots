@@ -24,7 +24,7 @@ def parse_config_file(fname: str) -> dict:
 
 def main():
     usage = ("{FILE} --config <config_file> --debug").format(FILE=__file__)
-    description = 'FPL Updates'
+    description = 'Twitter Bot Updates'
     parser = argparse.ArgumentParser(usage=usage, description=description)
     parser.add_argument("-c", "--config", help="Configuration file",
                         required=True)
