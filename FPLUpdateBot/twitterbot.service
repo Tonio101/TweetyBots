@@ -1,0 +1,15 @@
+[Unit]
+Description=Twitter Bot Service
+After=network.service
+
+[Service]
+ExecStart=/home/antonio/TweetyBots/FPLUpdateBot/start_twitter_bot.sh
+WorkingDirectory=/home/antonio/TweetyBots/FPLUpdateBot
+StandardOutput=inherit
+StandardError=inherit
+User=antonio
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target

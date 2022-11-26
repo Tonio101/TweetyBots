@@ -1,10 +1,13 @@
 import argparse
+import logging
 import json
 import os
 
 from threading import Lock
 from models.twitter_bot import TwitterBot
 from models.gcp_pubsub import GcpPubSubClient
+from models.logger import Logger
+log = Logger.getInstance().getLogger()
 
 
 def parse_config_file(fname: str) -> dict:
@@ -34,6 +37,9 @@ def main():
 
     args = parser.parse_args()
 
+    if args.debug:
+        log.setLevel(logging.DEBUG)
+
     config = parse_config_file(args.config)
     twitterConfig = config['twitterbot']
     gcpPubSubConfig = config['gcpPubSub']
@@ -52,7 +58,8 @@ def main():
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
-            twitter_id="Fpl_Updates"
+            twitter_id="Fpl_Updates",
+            tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
     fpl_alerts = \
@@ -60,7 +67,8 @@ def main():
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
-            twitter_id="FPL_Alerts"
+            twitter_id="FPL_Alerts",
+            tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
     inspirational_tweets = \
@@ -70,7 +78,8 @@ def main():
             pubsub_client=pubsub_client,
             twitter_id="SeffSaid",
             tweet_delay=(30 * 60),
-            use_as_is=True
+            use_as_is=True,
+            tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
     funny_tweets = \
@@ -80,7 +89,8 @@ def main():
             pubsub_client=pubsub_client,
             twitter_id="Dadsaysjokes",
             tweet_delay=(30 * 60),
-            use_as_is=True
+            use_as_is=True,
+            tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
     fpl_updates.start()

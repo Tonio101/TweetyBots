@@ -1,6 +1,8 @@
 import os
 
 from google.cloud import pubsub_v1
+from models.logger import Logger
+log = Logger.getInstance().getLogger()
 
 
 class GcpPubSubClient(object):
@@ -20,5 +22,5 @@ class GcpPubSubClient(object):
     def publish_message(self, data):
         future = self.publisher.publish(self.topic_path, data)
         # TODO - Handle return code.
-        print(future.result())
-        print("Published message to {0}".format(self.topic_path))
+        log.info(future.result())
+        log.info("Published message to {0}".format(self.topic_path))
