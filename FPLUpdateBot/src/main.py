@@ -53,14 +53,14 @@ def main():
 
     lock = Lock()
     # TODO: Only listen to FPL Updates during FPL Gameweek
-    fpl_updates = \
-        TwitterBot(
-            lock=lock,
-            twitter_bearer_token=twitterConfig['apiBearerToken'],
-            pubsub_client=pubsub_client,
-            twitter_id="Fpl_Updates",
-            tweets_id_db=twitterConfig['tweetsIdDb']
-        )
+    # fpl_updates = \
+    #    TwitterBot(
+    #        lock=lock,
+    #        twitter_bearer_token=twitterConfig['apiBearerToken'],
+    #        pubsub_client=pubsub_client,
+    #        twitter_id="Fpl_Updates",
+    #        tweets_id_db=twitterConfig['tweetsIdDb']
+    #    )
 
     fpl_alerts = \
         TwitterBot(
@@ -93,11 +93,11 @@ def main():
             tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
-    fpl_updates.start()
+    # fpl_updates.start()
     fpl_alerts.start()
     inspirational_tweets.start()
     funny_tweets.start()
-    fpl_updates.join()
+    # fpl_updates.join()
     fpl_alerts.join()
     inspirational_tweets.join()
     funny_tweets.join()
