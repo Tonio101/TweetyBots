@@ -36,6 +36,7 @@ class TweetInfo(object):
 
     def get_tweet_dict(self):
         return ({
+                "msg_type": 'twitter_bot',
                 # "timestamp": self.timestamp,
                 "use_as_is": self.use_as_is,
                 "tweet_id": self.id,
