@@ -64,6 +64,7 @@ def main():
 
     fpl_alerts = \
         TwitterBot(
+            msg_type='fpl_twitter_bot',
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
@@ -73,6 +74,7 @@ def main():
 
     inspirational_tweets = \
         TwitterBot(
+            msg_type='twitter_bot',
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,
@@ -84,6 +86,7 @@ def main():
 
     funny_tweets = \
         TwitterBot(
+            msg_type='twitter_bot',
             lock=lock,
             twitter_bearer_token=twitterConfig['apiBearerToken'],
             pubsub_client=pubsub_client,

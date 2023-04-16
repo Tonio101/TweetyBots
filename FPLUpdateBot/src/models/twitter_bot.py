@@ -25,18 +25,19 @@ DEFAULT_TIME_M = (5 * 60)
 
 class TweetInfo(object):
 
-    def __init__(self, id, timestamp, content):
+    def __init__(self, msg_type, id, timestamp, content):
         self.id = id
         self.timestamp = timestamp
         self.content = content
         self.use_as_is = False
+        self.msg_type = msg_type
 
     def set_use_as_is(self, use_as_is=False):
         self.use_as_is = use_as_is
 
     def get_tweet_dict(self):
         return ({
-                "msg_type": 'twitter_bot',
+                "msg_type": self.msg_type,
                 # "timestamp": self.timestamp,
                 "use_as_is": self.use_as_is,
                 "tweet_id": self.id,
@@ -47,6 +48,7 @@ class TweetInfo(object):
 class TwitterBot(Thread):
 
     def __init__(self,
+                 msg_type,
                  lock,
                  twitter_bearer_token,
                  pubsub_client,
@@ -60,6 +62,7 @@ class TwitterBot(Thread):
         # Call the Thread class's init function
         Thread.__init__(self)
         self.setDaemon(True)
+        self.msg_type = msg_type
         self.lock = lock
         self.client = tweepy.Client(bearer_token=twitter_bearer_token)
         self.pubsub_client = pubsub_client
@@ -98,7 +101,8 @@ class TwitterBot(Thread):
 
             for tweet in tweets.data:
                 tweet_info = \
-                        TweetInfo(tweet.id, tweet.created_at, tweet.text)
+                        TweetInfo(self.msg_type, tweet.id, 
+                                  tweet.created_at, tweet.text)
                 tweet_info.set_use_as_is(self.use_as_is)
                 result[tweet.id] = tweet_info
 
