@@ -101,7 +101,7 @@ class TwitterBot(Thread):
 
             for tweet in tweets.data:
                 tweet_info = \
-                        TweetInfo(self.msg_type, tweet.id, 
+                        TweetInfo(self.msg_type, tweet.id,
                                   tweet.created_at, tweet.text)
                 tweet_info.set_use_as_is(self.use_as_is)
                 result[tweet.id] = tweet_info
