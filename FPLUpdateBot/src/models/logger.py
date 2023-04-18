@@ -27,7 +27,7 @@ class Logger(object, metaclass=SingletonType):
         metaclass (_type_, optional): _description_. Defaults to SingletonType.
     """
 
-    def __init__(self, name='YoLinkv2', fname=FILE,
+    def __init__(self, name='TwitterBot', fname=FILE,
                  maxBytes=FILE_MAXSIZE, backupCount=FILE_BACKUP_CNT):
 
         self.logger = logging.getLogger(name)

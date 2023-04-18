@@ -20,7 +20,7 @@ USER_ID = "Fpl_Updates"
 DEFAULT_TIMEZONE = "America/Los_Angeles"
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-DEFAULT_TIME_M = (5 * 60)
+DEFAULT_TIME_M = 5 * 60
 
 
 class TweetInfo(object):
@@ -60,8 +60,8 @@ class TwitterBot(Thread):
                  timezone=DEFAULT_TIMEZONE,
                  tweets_id_db=TWEET_IDS):
         # Call the Thread class's init function
-        Thread.__init__(self)
-        self.setDaemon(True)
+        Thread.__init__(self, daemon=True)
+        # self.setDaemon(True)
         self.msg_type = msg_type
         self.lock = lock
         self.client = tweepy.Client(bearer_token=twitter_bearer_token)
