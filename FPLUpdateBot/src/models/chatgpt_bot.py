@@ -6,6 +6,7 @@ import random
 import string
 import csv
 import re
+import os
 
 from time import sleep
 from threading import Thread
@@ -47,7 +48,7 @@ class ChatGPTBot(Thread):
                  msg_type,
                  lock,
                  pubsub_client,
-                 gpt_prompts_file,
+                 config,
                  gpt_message_db=DEFAULT_CHAT_GPT_FILE,
                  chatgpt_message_delay=DEFAULT_GPT_MSG_DELAY):
         super().__init__(daemon=True)
@@ -56,8 +57,9 @@ class ChatGPTBot(Thread):
         self.pubsub_client = pubsub_client
         self.gpt_message_db = gpt_message_db
         self.chatgpt_message_delay = chatgpt_message_delay
+        os.environ["OPENAI_API_KEY"] = config['openApiKey']
         # self.chatgpt_prompts = self.get_chatgpt_prompts()
-        self.gpt_prompts_file = gpt_prompts_file
+        self.gpt_prompts_file = config['chatGptPromptsFile']
 
     def acquire(self):
         if self.lock:

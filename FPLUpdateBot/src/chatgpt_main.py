@@ -58,14 +58,12 @@ def main():
 
     lock = Lock()
 
-    os.environ["OPENAI_API_KEY"] = chat_gpt_config['openApiKey']
-
     chat_gpt_bot = \
         ChatGPTBot(
             msg_type='chatgpt_bot',
             lock=lock,
             pubsub_client=pubsub_client,
-            gpt_prompts_file=chat_gpt_config['chatGptPromptsFile']
+            config=chat_gpt_config
         )
     log.debug("Initialized ChatGPT Bot")
 
