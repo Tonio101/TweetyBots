@@ -66,7 +66,10 @@ def main():
         TwitterBot(
             msg_type='fpl_twitter_bot',
             lock=lock,
-            twitter_bearer_token=twitterConfig['apiBearerToken'],
+            consumer_key=twitterConfig['consumerKey'],
+            consumer_secret=twitterConfig['consumerSecret'],
+            access_token=twitterConfig['accessToken'],
+            access_token_secret=twitterConfig['accessTokenSecret'],
             pubsub_client=pubsub_client,
             twitter_id="FPL_Alerts",
             tweets_id_db=twitterConfig['tweetsIdDb']
@@ -76,7 +79,10 @@ def main():
         TwitterBot(
             msg_type='twitter_bot',
             lock=lock,
-            twitter_bearer_token=twitterConfig['apiBearerToken'],
+            consumer_key=twitterConfig['consumerKey'],
+            consumer_secret=twitterConfig['consumerSecret'],
+            access_token=twitterConfig['accessToken'],
+            access_token_secret=twitterConfig['accessTokenSecret'],
             pubsub_client=pubsub_client,
             twitter_id="SeffSaid",
             tweet_delay=(30 * 60),
@@ -88,7 +94,10 @@ def main():
         TwitterBot(
             msg_type='twitter_bot',
             lock=lock,
-            twitter_bearer_token=twitterConfig['apiBearerToken'],
+            consumer_key=twitterConfig['consumerKey'],
+            consumer_secret=twitterConfig['consumerSecret'],
+            access_token=twitterConfig['accessToken'],
+            access_token_secret=twitterConfig['accessTokenSecret'],
             pubsub_client=pubsub_client,
             twitter_id="Dadsaysjokes",
             tweet_delay=(30 * 60),

@@ -107,7 +107,7 @@ class ChatGPTBot(Thread):
             #             message + "\"\n")
         self.release()
 
-    def get_sent_gpt_messages(self) -> set:
+    def get_sent_gpt_messages(self):
         self.acquire()
         message_hash_set = set()
         message_sent_set = set()

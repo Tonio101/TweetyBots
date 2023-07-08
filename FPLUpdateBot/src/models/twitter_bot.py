@@ -50,7 +50,10 @@ class TwitterBot(Thread):
     def __init__(self,
                  msg_type,
                  lock,
-                 twitter_bearer_token,
+                 consumer_key,
+                 consumer_secret,
+                 access_token,
+                 access_token_secret,
                  pubsub_client,
                  twitter_id=USER_ID,
                  tweet_delay=DEFAULT_TIME_M,
@@ -64,7 +67,12 @@ class TwitterBot(Thread):
         # self.setDaemon(True)
         self.msg_type = msg_type
         self.lock = lock
-        self.client = tweepy.Client(bearer_token=twitter_bearer_token)
+        # Deprecated
+        # self.client = tweepy.Client(bearer_token=twitter_bearer_token)
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+        self.api = tweepy.API(auth)
+
         self.pubsub_client = pubsub_client
         self.twitter_id = twitter_id
         self.tweet_query = TWEET_QUERY.format(twitter_id)
@@ -84,22 +92,21 @@ class TwitterBot(Thread):
         current_time = pst_now.strftime(TIME_FORMAT)
 
         try:
-            tweets = self.client.search_recent_tweets(
-                    query=self.tweet_query,
-                    tweet_fields=self.tweet_fields,
-                    max_results=self.max_tweets)
+            tweets = tweepy.Cursor(self.api.search_tweets,
+                                   q=self.tweet_query,
+                                   tweet_fields=self.tweet_fields).items(self.max_tweets)
 
-            if tweets is None or tweets.data is None:
+            if tweets is None:
                 return result
 
             now = datetime.datetime.now()
             log.info("Successfully returned {} tweets at {} from {}".format(
-                len(tweets.data),
+                self.max_tweets,
                 current_time,
                 self.twitter_id
             ))
 
-            for tweet in tweets.data:
+            for tweet in tweets:
                 tweet_info = \
                         TweetInfo(self.msg_type, tweet.id,
                                   tweet.created_at, tweet.text)
