@@ -168,7 +168,7 @@ class ChatGPTBot(Thread):
                 (message, md5hash) = self.generate_message()
                 if message:
                     self.process_message(message, md5hash)
-            except openai.error.RateLimitError as ex:
+            except Exception as ex:
                 log.error(ex)
                 sleep(OPENAI_RATELIMIT_DELAY)
             sleep(self.chatgpt_message_delay)

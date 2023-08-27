@@ -62,18 +62,18 @@ def main():
     #        tweets_id_db=twitterConfig['tweetsIdDb']
     #    )
 
-    fpl_alerts = \
-        TwitterBot(
-            msg_type='fpl_twitter_bot',
-            lock=lock,
-            consumer_key=twitterConfig['consumerKey'],
-            consumer_secret=twitterConfig['consumerSecret'],
-            access_token=twitterConfig['accessToken'],
-            access_token_secret=twitterConfig['accessTokenSecret'],
-            pubsub_client=pubsub_client,
-            twitter_id="FPL_Alerts",
-            tweets_id_db=twitterConfig['tweetsIdDb']
-        )
+    # fpl_alerts = \
+    #     TwitterBot(
+    #         msg_type='fpl_twitter_bot',
+    #         lock=lock,
+    #         consumer_key=twitterConfig['consumerKey'],
+    #         consumer_secret=twitterConfig['consumerSecret'],
+    #         access_token=twitterConfig['accessToken'],
+    #         access_token_secret=twitterConfig['accessTokenSecret'],
+    #         pubsub_client=pubsub_client,
+    #         twitter_id="FPL_Alerts",
+    #         tweets_id_db=twitterConfig['tweetsIdDb']
+    #     )
 
     inspirational_tweets = \
         TwitterBot(
@@ -90,29 +90,29 @@ def main():
             tweets_id_db=twitterConfig['tweetsIdDb']
         )
 
-    funny_tweets = \
-        TwitterBot(
-            msg_type='twitter_bot',
-            lock=lock,
-            consumer_key=twitterConfig['consumerKey'],
-            consumer_secret=twitterConfig['consumerSecret'],
-            access_token=twitterConfig['accessToken'],
-            access_token_secret=twitterConfig['accessTokenSecret'],
-            pubsub_client=pubsub_client,
-            twitter_id="Dadsaysjokes",
-            tweet_delay=(30 * 60),
-            use_as_is=True,
-            tweets_id_db=twitterConfig['tweetsIdDb']
-        )
+    # funny_tweets = \
+    #     TwitterBot(
+    #         msg_type='twitter_bot',
+    #         lock=lock,
+    #         consumer_key=twitterConfig['consumerKey'],
+    #         consumer_secret=twitterConfig['consumerSecret'],
+    #         access_token=twitterConfig['accessToken'],
+    #         access_token_secret=twitterConfig['accessTokenSecret'],
+    #         pubsub_client=pubsub_client,
+    #         twitter_id="Dadsaysjokes",
+    #         tweet_delay=(30 * 60),
+    #         use_as_is=True,
+    #         tweets_id_db=twitterConfig['tweetsIdDb']
+    #     )
 
     # fpl_updates.start()
-    fpl_alerts.start()
+    # fpl_alerts.start()
     inspirational_tweets.start()
-    funny_tweets.start()
+    # funny_tweets.start()
     # fpl_updates.join()
-    fpl_alerts.join()
+    # fpl_alerts.join()
     inspirational_tweets.join()
-    funny_tweets.join()
+    # funny_tweets.join()
 
 
 if __name__ == "__main__":

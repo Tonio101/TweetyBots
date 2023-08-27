@@ -69,9 +69,17 @@ class TwitterBot(Thread):
         self.lock = lock
         # Deprecated
         # self.client = tweepy.Client(bearer_token=twitter_bearer_token)
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token, access_token_secret)
-        self.api = tweepy.API(auth)
+        # auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        # auth.set_access_token(access_token, access_token_secret)
+        # self.api = tweepy.API(auth)
+
+        # Authenticate to Twitter
+        self.api = tweepy.Client(
+            consumer_key=consumer_key,
+            consumer_secret=consumer_secret,
+            access_token=access_token,
+            access_token_secret=access_token_secret
+        )
 
         self.pubsub_client = pubsub_client
         self.twitter_id = twitter_id
@@ -92,12 +100,22 @@ class TwitterBot(Thread):
         current_time = pst_now.strftime(TIME_FORMAT)
 
         try:
-            tweets = tweepy.Cursor(self.api.search_tweets,
-                                   q=self.tweet_query,
-                                   tweet_fields=self.tweet_fields).items(self.max_tweets)
+            # tweets = tweepy.Cursor(self.api.search_tweets,
+            #                        q=self.tweet_query).items(self.max_tweets)
+            # tweets = tweepy.Cursor(self.api.search_tweets,
+            #                        q=self.tweet_query,
+            #                        tweet_fields=self.tweet_fields).items(self.max_tweets)
+            tweets = tweepy.Cursor(self.api.search_recent_tweets,
+                                   query=self.tweet_query).items(self.max_tweets)
+
+            # tweets = self.api.search(q=self.tweet_query, tweet_fields=self.tweet_fields, count=10)
 
             if tweets is None:
                 return result
+
+            print("Tweets = {}".format(
+                tweets
+            ))
 
             now = datetime.datetime.now()
             log.info("Successfully returned {} tweets at {} from {}".format(
